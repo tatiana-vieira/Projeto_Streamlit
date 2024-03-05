@@ -16,7 +16,8 @@ def conectar():
             host=host,
             port=port
         )
-        return conn
+        cursor = conn.cursor()
+        return conn, cursor
 
     except psycopg2.Error as e:
         print("Erro ao conectar ao banco de dados:", e)

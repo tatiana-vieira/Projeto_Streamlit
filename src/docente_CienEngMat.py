@@ -5,7 +5,7 @@ import plotly.express as px
 import psycopg2
 import matplotlib
 import seaborn as sns
-
+import sys
 # Desativa o aviso sobre o uso do Pyplot Global
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
@@ -34,17 +34,17 @@ def fechar_conexao(conn, cursor):
 consulta_docente = """
 SELECT DISTINCT ON (d.nome) sexo, nacionalidade, nivel, categoria, regimetrabalho
 FROM docente d
-WHERE codigoprograma = '32003013014P4' 
+WHERE codigoprograma = '32003013005P5' 
 ORDER BY d.nome;
 """
 dados_docente = executar_consulta(consulta_docente)
 
 # Consulta para contar a quantidade de docentes por categoria
-consulta_soma_categoria = "SELECT categoria,COUNT(DISTINCT nome) as soma_categoria FROM docente WHERE codigoprograma = '32003013014P4' GROUP BY categoria;"
+consulta_soma_categoria = "SELECT categoria,COUNT(DISTINCT nome) as soma_categoria FROM docente WHERE codigoprograma = '32003013005P5' GROUP BY categoria;"
 dados_soma_categoria = executar_consulta(consulta_soma_categoria)
 
 # Consulta para contar a quantidade de docentes orientador
-consulta_soma_orientador = """SELECT orientador, COUNT(DISTINCT nome) AS quantidade, STRING_AGG(DISTINCT nome, '<br>') AS discentes FROM discente WHERE codigoprograma = '32003013014P4' AND orientador != ''
+consulta_soma_orientador = """SELECT orientador, COUNT(DISTINCT nome) AS quantidade, STRING_AGG(DISTINCT nome, '<br>') AS discentes FROM discente WHERE codigoprograma = '32003013005P5' AND orientador != ''
     GROUP BY orientador;"""
 dados_soma_orientador = executar_consulta(consulta_soma_orientador)
 
@@ -61,7 +61,7 @@ consulta_nome_docente_producao = """
     SELECT DISTINCT ON (p.autor) p.autor, p.tipoproducao, p.subtipo, p.anaopublicacao, p.titulo, d.nome AS nome_docente
     FROM producaointelectual p
     INNER JOIN docente d ON p.autor = d.nome
-    WHERE p.codigoprograma = '32003013014P4' 
+    WHERE p.codigoprograma = '32003013005P5' 
     ORDER BY p.autor, p.titulo;
 """
 
@@ -135,7 +135,7 @@ if st.sidebar.checkbox('Nivel'):
     consulta_docente1 = """
        SELECT nivel, sexo, COUNT(DISTINCT nome) AS num_docentes
         FROM docente 
-        WHERE codigoprograma = '32003013014P4'
+        WHERE codigoprograma = '32003013005P5'
         GROUP BY nivel, sexo;
     """
 
@@ -165,7 +165,7 @@ if st.sidebar.checkbox('Estrato qualis'):
     FROM qualis q
     INNER JOIN producaointelectual p ON q.titulo = p.titulo
     INNER JOIN docente d ON p.autor = d.nome
-    WHERE q.nomeprograma = 'Administracao publica e de empresas,Ciências Contabeis e Turismo';
+    WHERE q.nomeprograma = 'ENGENHARIAS II';
 """ 
     # Executar a consulta e obter os dados
  dados_extrato = executar_consulta(consulta_extrato)
@@ -179,7 +179,7 @@ if st.sidebar.checkbox('Estrato qualis'):
 
 if st.sidebar.checkbox('Periodicos'):
     # Consulta SQL para selecionar todos os dados da tabela 'periodicos'
-    consulta_sql = "SELECT * FROM periodicos;"
+    consulta_sql = "SELECT * FROM periodicos where codigoprograma ='32003013005P5;"
 
         # Executar a consulta e armazenar os resultados em um DataFrame
     dados_periodicos = executar_consulta(consulta_sql)

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban de Tarefas</title>
+</head>
+<body>
+    <h1>Kanban de Tarefas</h1>
+
+    <form method="POST">
+        <label for="nova_tarefa">Nova Tarefa:</label>
+        <input type="text" id="nova_tarefa" name="nova_tarefa">
+        <button type="submit">Adicionar Tarefa</button>
+    </form>
+
+    <h2>A fazer</h2>
+    <ul>
+        {% for idx, tarefa in enumerate(lista_a_fazer) %}
+        <li>{{ tarefa }}</li>
+        <button type="submit" formaction="{{ url_for('kanban') }}" name="mover_em_andamento" value="{{ idx }}">Mover para 'Em andamento'</button>
+        {% endfor %}
+    </ul>
+
+    <h2>Em andamento</h2>
+    <ul>
+        {% for idx, tarefa in enumerate(lista_em_andamento) %}
+        <li>{{ tarefa }}</li>
+        <button type="submit" formaction="{{ url_for('kanban') }}" name="mover_concluido" value="{{ idx }}">Mover para 'Concluído'</button>
+        {% endfor %}
+    </ul>
+
+    <h2>Concluído</h2>
+    <ul>
+        {% for idx, tarefa in enumerate(lista_concluido) %}
+        <li>{{ tarefa }}</li>
+        <button type="submit" formaction="{{ url_for('kanban') }}" name="remover_tarefa" value="{{ idx }}">Remover Tarefa</button>
+        {% endfor %}
+    </ul>
+</body>
+</html>
